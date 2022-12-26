@@ -1,15 +1,16 @@
 # weeklyBasicNetStatsRecorderについて
-weeklyBasicNetStatsRecorderは、[Geth](https://github.com/ethereum/go-ethereum)にアクセスし、
-イーサリアムネットワークの統計情報をMySQLデータベースに記録します。  
-weeklyBasicNetStatsRecorderは、Gethとの通信には[web3js](https://github.com/web3/web3.js)を使用し、その他の通信には[sokcet.io](https://socket.io/)を使用します。  
-weeklyBasicNetStatsRecorderは、[blockDataRecorder](https://github.com/ethereumNetStats/blockDataRecorder)から`newBlockDataRecorded`イベントを[socketServer](https://github.com/ethereumNetStats/socketServer)を介して受け取ったときに集計処理を開始し、集計結果をデータベースに記録し、記録が完了したことを`weeklyBasicNetStatsRecorded`イベントでsocketServerに通知します。  
-**なお、weeklyBasicNetStatsRecorderは、[minutelyBasicNetStatsRecorder](https://github.com/ethereumNetStats/minutelyBasicNetStatsRecorder)の集計期間を示す変数`DURATION`を変更しただけのものです。**  
+weeklyBasicNetStatsRecorderは、[blockDataRecorder](https://github.com/ethereumNetStats/blockDataRecorder)からソケットイベントを受信したときに、[Geth](https://github.com/ethereum/go-ethereum)にアクセスし、
+イーサリアムネットワークの集計情報をMySQLデータベースに記録します。  
+より詳細には、weeklyBasicNetStatsRecorderは、[blockDataRecorder](https://github.com/ethereumNetStats/blockDataRecorder)から`newBlockDataRecorded`イベントを[socketServer](https://github.com/ethereumNetStats/socketServer)を介して受け取ったときに[Geth](https://geth.ethereum.org/)にアクセスして集計処理を開始します。  
+集計処理を完了するとweeklyBasicNetStatsRecorderは、集計結果をデータベースに記録し、記録が完了したことを示す`weeklyBasicNetStatsRecorded`イベントを発行して[socketServer](https://github.com/ethereumNetStats/socketServer)に通知します。  
+weeklyBasicNetStatsRecorderは、Gethとの通信には[web3js](https://github.com/web3/web3.js)を使用し、その他のソケット通信には[sokcet.io](https://socket.io/)を使用します。MySQLには、[node-mysql2](https://github.com/sidorares/node-mysql2)を使用してアクセスします。  
 
 # 事前準備
 [blockDataRecorder](https://github.com/ethereumNetStats/blockDataRecorder)のDockerのインストール〜ソースコードの実行までを完了して
 Gethの運用とMySQLのDBテーブル`blockData`の生成までを完了して下さい。  
 また、ethereumNetStatsのバックエンドは[socketServer](https://github.com/ethereumNetStats/socketServer)を介してそれぞれのプログラムがデータをやりとりします。したがってsocketServerを稼働させて下さい。  
-プログラムの内容のみを知りたい場合はソースコードを参照ください。
+プログラムの内容のみを知りたい場合はソースコードを参照ください。  
+**なお、weeklyBasicNetStatsRecorderは、[minutelyBasicNetStatsRecorder](https://github.com/ethereumNetStats/minutelyBasicNetStatsRecorder)の集計期間を示す変数`DURATION`を変更しただけのものです。**
 
 ### ソースコード
 - メイン：[weeklyBasicNetStatsRecorder.ts](https://github.com/ethereumNetStats/weeklyBasicNetStatsRecorder/blob/main/weeklyBasicNetStatsRecorder.ts)
@@ -60,6 +61,10 @@ CREATE TABLE `ethereum.weeklyBasicNetStats` (
 次にこのレポジトリを`clone`します。
 ```shell
 git clone https://github.com/ethereumNetStats/weeklyBasicNetStatsRecorder.git
+```
+`clone`が終わったら以下のコマンドでクローンしたディレクトリに移動して下さい。
+```shell
+cd ./dailyBasicNetStatsRecorder
 ```
 クローンしたディレクトリ内にある`.envSample`ファイルの`MYSQL_USER`と`MYSQL_PASS`を編集します。  
 [blockDataRecorder](https://github.com/ethereumNetStats/blockDataRecorder)の手順通りにMySQLコンテナを立ち上げた場合は`MYSQL_USER=root`、`MYSQL_PASS`は起動時に指定したパスワードになります。  
