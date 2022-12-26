@@ -64,7 +64,7 @@ git clone https://github.com/ethereumNetStats/weeklyBasicNetStatsRecorder.git
 ```
 `clone`が終わったら以下のコマンドでクローンしたディレクトリに移動して下さい。
 ```shell
-cd ./dailyBasicNetStatsRecorder
+cd ./weeklyBasicNetStatsRecorder
 ```
 クローンしたディレクトリ内にある`.envSample`ファイルの`MYSQL_USER`と`MYSQL_PASS`を編集します。  
 [blockDataRecorder](https://github.com/ethereumNetStats/blockDataRecorder)の手順通りにMySQLコンテナを立ち上げた場合は`MYSQL_USER=root`、`MYSQL_PASS`は起動時に指定したパスワードになります。  
