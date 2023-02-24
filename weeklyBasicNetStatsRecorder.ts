@@ -17,12 +17,12 @@ import type {ServerToClientEvents} from './types/socketEvents'
 import type {Pool, RowDataPacket} from "@ethereum_net_stats/get_mysql_connection";
 
 // データベースへのプールコネクションを作成
-let pool: Pool = getMysqlConnection(false);
+let pool: Pool = getMysqlConnection(false, true);
 const recordTableName: string = "ethereum.weeklyBasicNetStats";
 
 // socket.io-clientの定義
 const socketClientName: string = "weeklyBasicNetStatsRecorder";
-const socketClient: Socket<ServerToClientEvents> = io(`${process.env.SOCKET_SERVER_ADDRESS}`, {
+const socketClient: Socket<ServerToClientEvents> = io(`${process.env.SOCKET_SERVER_DOCKER_ADDRESS}`, {
     forceNew: true,
     query: {name: socketClientName}
 });

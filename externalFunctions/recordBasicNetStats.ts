@@ -3,7 +3,7 @@ import {performance} from 'perf_hooks';
 
 // 自作パッケージのインポート
 import {getMysqlConnection} from "@ethereum_net_stats/get_mysql_connection";
-import {gethHttpClient} from "@ethereum_net_stats/get_geth_connections";
+import {gethDockerHttpClient} from "@ethereum_net_stats/get_geth_connections";
 import {currentTimeReadable, unixTimeReadable} from "@ethereum_net_stats/readable_time";
 
 // 型定義のインポート
@@ -14,7 +14,7 @@ import type {Pool, OkPacket, RowDataPacket} from "@ethereum_net_stats/get_mysql_
 import type {Block} from "web3-eth";
 
 // MySQLとのプールコネクションを生成
-let pool: Pool = getMysqlConnection(false);
+let pool: Pool = getMysqlConnection(false, true);
 
 // 関数"recordBasicNetStats"の宣言
 export const recordBasicNetStats = async (timeRangeArray: timeRangeArray, socketClient: Socket<ClientToServerEvents>, recordTableName: string, durationInSec: number) => {
@@ -104,7 +104,7 @@ export const recordBasicNetStats = async (timeRangeArray: timeRangeArray, socket
             // アンクルブロックデータがある場合は、アンクルブロックデータを格納する
             if (block.uncles) {
                 for (let i = 0; i < block.uncles.split(',').length; i++) {
-                    uncleBlockData.push(await gethHttpClient.getUncle(block.number, i));
+                    uncleBlockData.push(await gethDockerHttpClient.getUncle(block.number, i));
                 }
             }
 
